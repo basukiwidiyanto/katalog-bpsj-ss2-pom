@@ -1,0 +1,3803 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KATALOG MESIN PABRIK SAWIT PT SS2 POM</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#2c5e3b;
+    --secondary:#e67e22;
+    --bg:#f4f7f6;
+    --card:#ffffff;
+    --text:#212529;
+    --muted:#6c757d;
+    --border:#dee2e6;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,sans-serif;
+}
+
+.navbar{
+    background:linear-gradient(135deg,#214a2e,#2c5e3b);
+}
+
+.navbar-brand{
+    font-weight:700;
+}
+
+.hero{
+    background:linear-gradient(135deg,#2c5e3b,#3d7a50);
+    color:white;
+    border-radius:0 0 25px 25px;
+}
+
+.stat-card{
+    border:0;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.stat-card:hover{
+    transform:translateY(-3px);
+}
+
+.station-card,
+.machine-card{
+    border:0;
+    border-radius:18px;
+    background:var(--card);
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+}
+
+.station-card{
+    cursor:pointer;
+    transition:.2s;
+}
+
+.station-card:hover{
+    transform:translateY(-4px);
+}
+
+.station-icon{
+    width:55px;
+    height:55px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e8f3eb;
+    color:var(--primary);
+    font-size:25px;
+}
+
+.status-running{
+    background:#198754;
+}
+
+.status-standby{
+    background:#ffc107;
+    color:#000;
+}
+
+.status-repair{
+    background:#dc3545;
+}
+
+.status-unknown{
+    background:#6c757d;
+}
+
+.admin-only{
+    display:none !important;
+}
+
+body.is-admin .admin-only{
+    display:inline-block !important;
+}
+
+.machine-detail{
+    border-left:4px solid var(--primary);
+}
+
+.spec-table td:first-child{
+    width:40%;
+    font-weight:600;
+}
+
+.empty-box{
+    border:2px dashed #ced4da;
+    border-radius:15px;
+    padding:35px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.modal-header{
+    background:var(--primary);
+    color:white;
+}
+
+.login-status{
+    font-size:.85rem;
+}
+
+.dark-mode{
+    background:#121212;
+    color:#eee;
+}
+
+.dark-mode .card,
+.dark-mode .modal-content,
+.dark-mode .table{
+    background:#1e1e1e;
+    color:#eee;
+}
+
+.dark-mode .form-control,
+.dark-mode .form-select{
+    background:#252525;
+    color:#eee;
+    border-color:#444;
+}
+
+.dark-mode .text-muted{
+    color:#aaa !important;
+}
+
+.print-only{
+    display:none;
+}
+
+@media print{
+    .no-print,
+    nav,
+    .modal{
+        display:none !important;
+    }
+
+    .print-only{
+        display:block;
+    }
+
+    body{
+        background:white;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark sticky-top no-print">
+<div class="container-fluid">
+
+    <a class="navbar-brand">
+        <i class="bi bi-gear-wide-connected"></i>
+        KATALOG MESIN SS2 POM
+    </a>
+
+    <div class="d-flex align-items-center gap-2">
+
+        <span id="loginStatus"
+              class="text-white login-status">
+            Pengunjung
+        </span>
+
+        <button class="btn btn-light btn-sm"
+                id="loginBtn"
+                onclick="openLoginModal()">
+            <i class="bi bi-person-lock"></i>
+            Login Admin
+        </button>
+
+        <button class="btn btn-warning btn-sm d-none"
+                id="logoutBtn"
+                onclick="logoutAdmin()">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </button>
+
+        <button class="btn btn-outline-light btn-sm"
+                onclick="toggleDarkMode()">
+            <i class="bi bi-moon-stars"></i>
+        </button>
+
+    </div>
+</div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero py-4 mb-4 no-print">
+<div class="container">
+
+    <div class="row align-items-center">
+
+        <div class="col-lg-8">
+
+            <h1 class="fw-bold">
+                KATALOG MESIN PABRIK SAWIT
+            </h1>
+
+            <p class="mb-1">
+                PT BPSJ SS2 POM
+            </p>
+
+            <small>
+                Sistem Informasi Katalog Mesin & Maintenance
+            </small>
+
+            <div class="mt-2">
+                <small>
+                    BY: BASUKI WIDIYANTO
+                </small>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+
+            <button class="btn btn-warning admin-only"
+                    onclick="openStationForm()">
+                <i class="bi bi-plus-circle"></i>
+                Tambah Stasiun
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+<!-- DASHBOARD -->
+<div class="container no-print">
+
+<div class="row g-3 mb-4">
+
+    <div class="col-6 col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <small class="text-muted">Total Mesin</small>
+                <h2 id="totalMachines">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <small class="text-muted">Running</small>
+                <h2 id="runningMachines">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <small class="text-muted">Standby</small>
+                <h2 id="standbyMachines">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <small class="text-muted">Repair</small>
+                <h2 id="repairMachines">0</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- SEARCH -->
+<div class="card border-0 shadow-sm mb-4">
+<div class="card-body">
+
+    <div class="input-group">
+
+        <span class="input-group-text">
+            <i class="bi bi-search"></i>
+        </span>
+
+        <input type="text"
+               id="searchInput"
+               class="form-control"
+               placeholder="Cari stasiun, mesin, spesifikasi, maintenance..."
+               oninput="renderStations()">
+
+        <button class="btn btn-secondary"
+                onclick="clearSearch()">
+            Reset
+        </button>
+
+    </div>
+
+</div>
+</div>
+
+
+<!-- TOOLS -->
+<div class="d-flex flex-wrap gap-2 mb-4">
+
+    <button class="btn btn-outline-success admin-only"
+            onclick="backupData()">
+        <i class="bi bi-download"></i>
+        Backup JSON
+    </button>
+
+    <label class="btn btn-outline-danger admin-only">
+        <i class="bi bi-upload"></i>
+        Restore JSON
+        <input type="file"
+               id="restoreFile"
+               accept=".json"
+               hidden
+               onchange="restoreData(event)">
+    </label>
+
+    <button class="btn btn-outline-primary"
+            onclick="window.print()">
+        <i class="bi bi-printer"></i>
+        Print
+    </button>
+
+</div>
+
+
+<!-- STATIONS -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">
+        <i class="bi bi-building"></i>
+        Stasiun Pabrik
+    </h4>
+
+    <span class="badge bg-success"
+          id="stationCount">
+        0 Stasiun
+    </span>
+</div>
+
+<div id="stationsContainer"
+     class="row g-3 pb-5">
+</div>
+
+</div>
+
+
+<!-- STATION MODAL -->
+<div class="modal fade"
+     id="stationModal"
+     tabindex="-1">
+
+<div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <h5 class="modal-title"
+        id="stationModalTitle">
+        Stasiun
+    </h5>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <div id="stationInfo"
+         class="mb-3">
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h5>
+            Daftar Mesin
+        </h5>
+
+        <div class="d-flex gap-2">
+
+            <button class="btn btn-warning btn-sm admin-only"
+                    onclick="openMachineForm()">
+                <i class="bi bi-plus"></i>
+                Tambah Mesin
+            </button>
+
+            <button class="btn btn-outline-secondary btn-sm admin-only"
+                    onclick="editCurrentStation()">
+                <i class="bi bi-pencil"></i>
+                Edit Stasiun
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="machineList"></div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- STATION FORM -->
+<div class="modal fade"
+     id="stationFormModal"
+     tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <h5 class="modal-title">
+        <i class="bi bi-building"></i>
+        <span id="stationFormTitle">
+            Tambah Stasiun
+        </span>
+    </h5>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <input type="hidden"
+           id="stationId">
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Nama Stasiun
+        </label>
+
+        <input type="text"
+               id="stationName"
+               class="form-control"
+               placeholder="Contoh: Press Station">
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Keterangan
+        </label>
+
+        <textarea id="stationDesc"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Keterangan stasiun"></textarea>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+
+    <button class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Batal
+    </button>
+
+    <button class="btn btn-success"
+            onclick="saveStation()">
+        Simpan
+    </button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- MACHINE FORM -->
+<div class="modal fade"
+     id="machineFormModal"
+     tabindex="-1">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <h5 class="modal-title">
+        <i class="bi bi-gear"></i>
+        <span id="machineFormTitle">
+            Tambah Mesin
+        </span>
+    </h5>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <input type="hidden"
+           id="machineOldName">
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Nama Mesin
+        </label>
+
+        <input type="text"
+               id="machineName"
+               class="form-control"
+               placeholder="Contoh: Press No. 1">
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Status
+        </label>
+
+        <select id="machineStatus"
+                class="form-select">
+
+            <option value="Running">
+                Running
+            </option>
+
+            <option value="Standby">
+                Standby
+            </option>
+
+            <option value="Repair">
+                Repair
+            </option>
+
+        </select>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+
+    <button class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Batal
+    </button>
+
+    <button class="btn btn-success"
+            onclick="saveMachine()">
+        Simpan
+    </button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- MACHINE DETAIL -->
+<div class="modal fade"
+     id="machineModal"
+     tabindex="-1">
+
+<div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <div>
+
+        <h5 class="modal-title"
+            id="machineModalTitle">
+            Detail Mesin
+        </h5>
+
+        <small id="machineModalSubtitle"></small>
+
+    </div>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+
+        <button class="btn btn-outline-primary"
+                onclick="showMachineTab('info')">
+            <i class="bi bi-info-circle"></i>
+            Informasi
+        </button>
+
+        <button class="btn btn-outline-success"
+                onclick="showMachineTab('maintenance')">
+            <i class="bi bi-wrench-adjustable"></i>
+            Maintenance
+        </button>
+
+        <button class="btn btn-outline-dark"
+                onclick="printMachineCard()">
+            <i class="bi bi-printer"></i>
+            Print
+        </button>
+
+        <button class="btn btn-warning admin-only"
+                onclick="editCurrentMachine()">
+            <i class="bi bi-pencil"></i>
+            Edit
+        </button>
+
+        <button class="btn btn-danger admin-only"
+                onclick="deleteCurrentMachine()">
+            <i class="bi bi-trash"></i>
+            Hapus
+        </button>
+
+    </div>
+
+    <div id="machineInfoTab"></div>
+
+    <div id="maintenanceTab"
+         style="display:none;">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5>
+                Riwayat Maintenance
+            </h5>
+
+            <button class="btn btn-success admin-only"
+                    onclick="openRepairForm()">
+                <i class="bi bi-plus"></i>
+                Tambah Maintenance
+            </button>
+
+        </div>
+
+        <div id="repairTable"></div>
+
+    </div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- MACHINE EDIT / SPEC -->
+<div class="modal fade"
+     id="machineSpecModal"
+     tabindex="-1">
+
+<div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <h5 class="modal-title">
+        Edit Informasi Mesin
+    </h5>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <input type="hidden"
+           id="specMachineName">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <label class="form-label">
+                Status
+            </label>
+
+            <select id="specStatus"
+                    class="form-select mb-3">
+
+                <option value="Running">
+                    Running
+                </option>
+
+                <option value="Standby">
+                    Standby
+                </option>
+
+                <option value="Repair">
+                    Repair
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h6 class="fw-bold">
+        Spesifikasi Mesin
+    </h6>
+
+    <div id="specFields"></div>
+
+    <hr>
+
+    <h6 class="fw-bold">
+        Dokumen & Foto
+    </h6>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            URL Foto Nameplate
+        </label>
+
+        <input type="url"
+               id="nameplateUrl"
+               class="form-control"
+               placeholder="https://...">
+
+        <small class="text-muted">
+            Upload foto ke layanan penyimpanan pilihan Anda,
+            lalu tempel URL-nya di sini.
+        </small>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            URL PDF Katalog / Manual
+        </label>
+
+        <input type="url"
+               id="catalogUrl"
+               class="form-control"
+               placeholder="https://...">
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+
+    <button class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Batal
+    </button>
+
+    <button class="btn btn-success"
+            onclick="saveMachineSpec()">
+        Simpan
+    </button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- REPAIR FORM -->
+<div class="modal fade"
+     id="repairModal"
+     tabindex="-1">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <h5 class="modal-title">
+        Maintenance Mesin
+    </h5>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <input type="hidden"
+           id="repairIndex">
+
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+
+            <label class="form-label">
+                Tanggal
+            </label>
+
+            <input type="date"
+                   id="repairDate"
+                   class="form-control">
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+            <label class="form-label">
+                HM Mesin
+            </label>
+
+            <input type="number"
+                   id="repairHM"
+                   class="form-control">
+
+        </div>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Problem / Kerusakan
+        </label>
+
+        <input type="text"
+               id="repairProblem"
+               class="form-control"
+               placeholder="Contoh: Bearing rusak">
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Tindakan
+        </label>
+
+        <input type="text"
+               id="repairAction"
+               class="form-control"
+               placeholder="Contoh: Ganti bearing">
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Keterangan
+        </label>
+
+        <textarea id="repairDescription"
+                  class="form-control"
+                  rows="3"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Sparepart yang digunakan
+        </label>
+
+        <textarea id="repairParts"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Contoh:
+Bearing 22218 - 1 pcs
+Seal 90x120x12 - 1 pcs"></textarea>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+
+    <button class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Batal
+    </button>
+
+    <button class="btn btn-success"
+            onclick="saveRepair()">
+        Simpan
+    </button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- LOGIN -->
+<div class="modal fade"
+     id="loginModal"
+     tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+    <h5 class="modal-title">
+        <i class="bi bi-shield-lock"></i>
+        Login Admin
+    </h5>
+
+    <button class="btn-close btn-close-white"
+            data-bs-dismiss="modal"></button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Email
+        </label>
+
+        <input type="email"
+               id="loginEmail"
+               class="form-control"
+               autocomplete="username">
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Password
+        </label>
+
+        <input type="password"
+               id="loginPassword"
+               class="form-control"
+               autocomplete="current-password">
+
+    </div>
+
+    <div id="loginMessage"
+         class="small">
+    </div>
+
+</div>
+
+<div class="modal-footer">
+
+    <button class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Batal
+    </button>
+
+    <button class="btn btn-success"
+            onclick="loginAdmin()">
+        <i class="bi bi-box-arrow-in-right"></i>
+        Login
+    </button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<!-- PRINT -->
+<div id="printArea"
+     class="print-only">
+</div>
+
+
+<script type="module">
+
+/* =====================================================
+   FIREBASE
+===================================================== */
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    setDoc,
+    deleteDoc,
+    writeBatch,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDmbm2kf75KabNjtVhvkqGHlasLbwlBg28",
+    authDomain: "katalog-mesin-ss2-pom.firebaseapp.com",
+    projectId: "katalog-mesin-ss2-pom",
+    storageBucket: "katalog-mesin-ss2-pom.firebasestorage.app",
+    messagingSenderId: "1081132233902",
+    appId: "1:1081132233902:web:9791b7c020652c1c1be93f6"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+/*
+   PENTING:
+   GANTI DENGAN EMAIL ADMIN ANDA.
+*/
+const ADMIN_EMAIL = "Basukiwidiyanto7@gmail.com";
+
+
+let currentUser = null;
+let isAdmin = false;
+
+let stationsData = [];
+
+let currentStationId = null;
+let currentMachineName = null;
+
+
+/* =====================================================
+   DEFAULT DATA
+===================================================== */
+
+const defaultStations = [
+
+{
+    id:"fla",
+    name:"FLA / Fat Pit",
+    desc:"Fat Pit / Recovery",
+    machines:{
+        "Fat Pit Pump":{
+            status:"Running",
+            spec:{
+                motor:"15 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"sterilizer",
+    name:"Sterilizer",
+    desc:"Stasiun perebusan buah",
+    machines:{
+        "Sterilizer No. 1":{
+            status:"Running",
+            spec:{},
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        },
+        "Sterilizer No. 2":{
+            status:"Running",
+            spec:{},
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        },
+        "Sterilizer No. 3":{
+            status:"Running",
+            spec:{},
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        },
+        "Sterilizer No. 4":{
+            status:"Running",
+            spec:{},
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"threser",
+    name:"Threser",
+    desc:"Stasiun pemipilan",
+    machines:{
+        "Threser No. 1":{
+            status:"Running",
+            spec:{
+                motor:"30 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"press",
+    name:"Press Station",
+    desc:"Stasiun pengepresan",
+    machines:{
+        "Press No. 1":{
+            status:"Running",
+            spec:{
+                motor:"22 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"klarifikasi",
+    name:"Klarifikasi",
+    desc:"Stasiun pemurnian minyak",
+    machines:{
+        "Clarification Pump":{
+            status:"Running",
+            spec:{
+                motor:"11 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"kernel",
+    name:"Kernel Station",
+    desc:"Stasiun pengolahan kernel",
+    machines:{
+        "Ripple Mill No. 1":{
+            status:"Running",
+            spec:{
+                motor:"45 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"power-house",
+    name:"Power House",
+    desc:"Pembangkit listrik",
+    machines:{
+        "Genset No. 1":{
+            status:"Running",
+            spec:{},
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"boiler",
+    name:"Boiler",
+    desc:"Stasiun boiler",
+    machines:{
+        "Boiler Feed Pump":{
+            status:"Running",
+            spec:{
+                motor:"55 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"efb",
+    name:"EFB Station",
+    desc:"Pengolahan Empty Fruit Bunch",
+    machines:{
+        "EFB Press No. 1":{
+            status:"Running",
+            spec:{
+                motor:"75 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"demint",
+    name:"Demint Plant",
+    desc:"Demineralization Plant",
+    machines:{
+        "Demint Pump":{
+            status:"Running",
+            spec:{
+                motor:"5.5 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"wtp",
+    name:"Water Treatment",
+    desc:"Pengolahan air",
+    machines:{
+        "WTP Pump":{
+            status:"Running",
+            spec:{
+                motor:"7.5 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"effluent",
+    name:"Effluent Treatment",
+    desc:"Pengolahan limbah cair",
+    machines:{
+        "Effluent Pump":{
+            status:"Running",
+            spec:{
+                motor:"22 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"land-aplikasi",
+    name:"Land Aplikasi",
+    desc:"Aplikasi limbah ke lahan",
+    machines:{
+        "Land Application Pump":{
+            status:"Running",
+            spec:{
+                motor:"30 kW"
+            },
+            repairs:[],
+            nameplateUrl:"",
+            catalogUrl:""
+        }
+    }
+},
+
+{
+    id:"weight-bridge",
+    name:"Weight Bridge",
+    desc:"Timbangan kendaraan",
+    machines:{}
+}
+
+];
+
+
+const defaultSpecFields = [
+    "motor",
+    "pulley motor",
+    "pulley gearbox",
+    "rasio gearbox",
+    "v belt",
+    "jumlah v belt",
+    "kopling",
+    "chain kopling",
+    "bearing 1",
+    "bearing 2",
+    "bearing 3",
+    "oil seal",
+    "oli",
+    "gear transmisi gearbox",
+    "gear transmisi mesin",
+    "rpm mesin",
+    "rpm motor",
+    "rantai transmisi",
+    "mech seal",
+    "flange bearing",
+    "ukuran sproket drive",
+    "sproket driven",
+    "rantai penggerak",
+    "jenis oli",
+    "plummer block",
+    "adapter sleeve"
+];
+
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+onAuthStateChanged(auth, user => {
+
+    currentUser = user;
+
+    if(user){
+
+        const email = (user.email || "").toLowerCase();
+
+        isAdmin =
+            email === ADMIN_EMAIL.toLowerCase();
+
+        if(isAdmin){
+
+            document.body.classList.add("is-admin");
+
+            document.getElementById("loginStatus").textContent =
+                "Admin: " + user.email;
+
+            document.getElementById("loginBtn")
+                .classList.add("d-none");
+
+            document.getElementById("logoutBtn")
+                .classList.remove("d-none");
+
+        }else{
+
+            document.body.classList.remove("is-admin");
+
+            document.getElementById("loginStatus").textContent =
+                "Pengunjung";
+
+            document.getElementById("loginBtn")
+                .classList.remove("d-none");
+
+            document.getElementById("logoutBtn")
+                .classList.add("d-none");
+
+            showMessage(
+                "Akun berhasil login, tetapi bukan akun Admin.",
+                "warning"
+            );
+        }
+
+    }else{
+
+        isAdmin = false;
+
+        document.body.classList.remove("is-admin");
+
+        document.getElementById("loginStatus").textContent =
+            "Pengunjung";
+
+        document.getElementById("loginBtn")
+            .classList.remove("d-none");
+
+        document.getElementById("logoutBtn")
+            .classList.add("d-none");
+    }
+
+    renderStations();
+});
+
+
+window.openLoginModal = function(){
+
+    const modal =
+        bootstrap.Modal.getOrCreateInstance(
+            document.getElementById("loginModal")
+        );
+
+    modal.show();
+};
+
+
+window.loginAdmin = async function(){
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    const msg =
+        document.getElementById("loginMessage");
+
+    if(!email || !password){
+
+        msg.className = "text-danger small";
+        msg.textContent =
+            "Email dan password wajib diisi.";
+
+        return;
+    }
+
+    try{
+
+        const result =
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+        if(
+            result.user.email.toLowerCase()
+            !== ADMIN_EMAIL.toLowerCase()
+        ){
+
+            await signOut(auth);
+
+            msg.className = "text-danger small";
+
+            msg.textContent =
+                "Login berhasil, tetapi email ini bukan Admin.";
+
+            return;
+        }
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById("loginModal")
+            )
+            .hide();
+
+        showMessage(
+            "Login Admin berhasil.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        msg.className =
+            "text-danger small";
+
+        msg.textContent =
+            "Login gagal: " + getFirebaseError(error);
+    }
+};
+
+
+window.logoutAdmin = async function(){
+
+    await signOut(auth);
+
+    showMessage(
+        "Anda sudah logout.",
+        "success"
+    );
+};
+
+
+/* =====================================================
+   FIRESTORE LOAD
+===================================================== */
+
+async function loadFirebaseData(){
+
+    try{
+
+        const snapshot =
+            await getDocs(
+                collection(db,"stations")
+            );
+
+        stationsData =
+            snapshot.docs.map(d => ({
+                id:d.id,
+                ...d.data()
+            }));
+
+        if(stationsData.length === 0){
+
+            if(isAdmin){
+
+                await createInitialStations();
+
+            }else{
+
+                renderStations();
+            }
+        }
+
+        renderStations();
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Gagal membaca Firestore: " +
+            getFirebaseError(error),
+            "danger"
+        );
+    }
+}
+
+
+/* =====================================================
+   INITIAL DATA
+===================================================== */
+
+async function createInitialStations(){
+
+    try{
+
+        const batch = writeBatch(db);
+
+        defaultStations.forEach(station => {
+
+            const ref =
+                doc(db,"stations",station.id);
+
+            batch.set(ref,station);
+        });
+
+        const settingsRef =
+            doc(db,"settings","main");
+
+        batch.set(
+            settingsRef,
+            {
+                specFields:defaultSpecFields,
+                updatedAt:serverTimestamp()
+            }
+        );
+
+        await batch.commit();
+
+        stationsData =
+            JSON.parse(
+                JSON.stringify(defaultStations)
+            );
+
+        showMessage(
+            "Data awal katalog berhasil dibuat.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Gagal membuat data awal: " +
+            getFirebaseError(error),
+            "danger"
+        );
+    }
+}
+
+
+/* =====================================================
+   RENDER STATIONS
+===================================================== */
+
+window.renderStations = function(){
+
+    const container =
+        document.getElementById(
+            "stationsContainer"
+        );
+
+    const search =
+        document.getElementById(
+            "searchInput"
+        ).value
+        .trim()
+        .toLowerCase();
+
+    container.innerHTML = "";
+
+    let filtered =
+        stationsData.filter(station => {
+
+            if(!search) return true;
+
+            return JSON.stringify(station)
+                .toLowerCase()
+                .includes(search);
+        });
+
+    document.getElementById("stationCount")
+        .textContent =
+        filtered.length + " Stasiun";
+
+    if(filtered.length === 0){
+
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="empty-box">
+                    <i class="bi bi-search fs-1"></i>
+                    <h5 class="mt-3">
+                        Data tidak ditemukan
+                    </h5>
+                </div>
+            </div>
+        `;
+
+        updateStats();
+
+        return;
+    }
+
+    filtered.forEach(station => {
+
+        const machines =
+            station.machines || {};
+
+        const machineCount =
+            Object.keys(machines).length;
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "col-12 col-md-6 col-lg-4";
+
+        card.innerHTML = `
+
+        <div class="card station-card h-100"
+             onclick="openStation('${escapeAttr(station.id)}')">
+
+            <div class="card-body">
+
+                <div class="d-flex align-items-start gap-3">
+
+                    <div class="station-icon">
+                        <i class="bi bi-building-gear"></i>
+                    </div>
+
+                    <div class="flex-grow-1">
+
+                        <h5 class="fw-bold mb-1">
+                            ${escapeHtml(station.name)}
+                        </h5>
+
+                        <small class="text-muted">
+                            ${escapeHtml(station.desc || "")}
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+
+                    <span>
+                        <i class="bi bi-gear"></i>
+                        ${machineCount} Mesin
+                    </span>
+
+                    <span class="text-success">
+                        Lihat
+                        <i class="bi bi-arrow-right"></i>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+        `;
+
+        container.appendChild(card);
+    });
+
+    updateStats();
+};
+
+
+/* =====================================================
+   STATION
+===================================================== */
+
+window.openStation = function(id){
+
+    const station =
+        stationsData.find(s => s.id === id);
+
+    if(!station) return;
+
+    currentStationId = id;
+
+    document.getElementById(
+        "stationModalTitle"
+    ).textContent = station.name;
+
+    document.getElementById(
+        "stationInfo"
+    ).innerHTML = `
+
+        <div class="machine-detail p-3">
+
+            <h6 class="fw-bold">
+                ${escapeHtml(station.name)}
+            </h6>
+
+            <p class="mb-0 text-muted">
+                ${escapeHtml(station.desc || "-")}
+            </p>
+
+        </div>
+    `;
+
+    renderMachineList(station);
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById("stationModal")
+        )
+        .show();
+};
+
+
+function renderMachineList(station){
+
+    const container =
+        document.getElementById(
+            "machineList"
+        );
+
+    container.innerHTML = "";
+
+    const machines =
+        station.machines || {};
+
+    const names =
+        Object.keys(machines);
+
+    if(names.length === 0){
+
+        container.innerHTML = `
+            <div class="empty-box">
+                Belum ada mesin di stasiun ini.
+            </div>
+        `;
+
+        return;
+    }
+
+    names.forEach(name => {
+
+        const machine =
+            machines[name];
+
+        const statusClass =
+            getStatusClass(machine.status);
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "card machine-card mb-2";
+
+        card.innerHTML = `
+
+        <div class="card-body">
+
+            <div class="d-flex
+                        justify-content-between
+                        align-items-center">
+
+                <div>
+
+                    <h6 class="fw-bold mb-1">
+                        ${escapeHtml(name)}
+                    </h6>
+
+                    <span class="badge ${statusClass}">
+                        ${escapeHtml(machine.status || "Unknown")}
+                    </span>
+
+                </div>
+
+                <button class="btn btn-sm btn-primary"
+                        onclick="openMachine('${escapeAttr(name)}')">
+
+                    <i class="bi bi-eye"></i>
+                    Detail
+
+                </button>
+
+            </div>
+
+        </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+
+window.openStationForm = function(){
+
+    if(!requireAdmin()) return;
+
+    document.getElementById(
+        "stationFormTitle"
+    ).textContent =
+        "Tambah Stasiun";
+
+    document.getElementById(
+        "stationId"
+    ).value = "";
+
+    document.getElementById(
+        "stationName"
+    ).value = "";
+
+    document.getElementById(
+        "stationDesc"
+    ).value = "";
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "stationFormModal"
+            )
+        ).show();
+};
+
+
+window.editCurrentStation = function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        stationsData.find(
+            s => s.id === currentStationId
+        );
+
+    if(!station) return;
+
+    document.getElementById(
+        "stationFormTitle"
+    ).textContent =
+        "Edit Stasiun";
+
+    document.getElementById(
+        "stationId"
+    ).value =
+        station.id;
+
+    document.getElementById(
+        "stationName"
+    ).value =
+        station.name;
+
+    document.getElementById(
+        "stationDesc"
+    ).value =
+        station.desc || "";
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "stationFormModal"
+            )
+        ).show();
+};
+
+
+window.saveStation = async function(){
+
+    if(!requireAdmin()) return;
+
+    const id =
+        document.getElementById(
+            "stationId"
+        ).value.trim();
+
+    const name =
+        document.getElementById(
+            "stationName"
+        ).value.trim();
+
+    const desc =
+        document.getElementById(
+            "stationDesc"
+        ).value.trim();
+
+    if(!name){
+
+        alert("Nama stasiun wajib diisi.");
+
+        return;
+    }
+
+    try{
+
+        let station;
+
+        if(id){
+
+            station =
+                stationsData.find(
+                    s => s.id === id
+                );
+
+            station.name = name;
+            station.desc = desc;
+
+        }else{
+
+            const newId =
+                slugify(name);
+
+            if(
+                stationsData.some(
+                    s => s.id === newId
+                )
+            ){
+
+                alert(
+                    "Stasiun dengan nama tersebut sudah ada."
+                );
+
+                return;
+            }
+
+            station = {
+                id:newId,
+                name:name,
+                desc:desc,
+                machines:{}
+            };
+
+            stationsData.push(station);
+        }
+
+        await setDoc(
+            doc(db,"stations",station.id),
+            station
+        );
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById(
+                    "stationFormModal"
+                )
+            )
+            .hide();
+
+        renderStations();
+
+        if(currentStationId){
+
+            const updated =
+                stationsData.find(
+                    s => s.id === currentStationId
+                );
+
+            if(updated){
+
+                document.getElementById(
+                    "stationModalTitle"
+                ).textContent =
+                    updated.name;
+
+                renderMachineList(updated);
+            }
+        }
+
+        showMessage(
+            "Stasiun berhasil disimpan.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Gagal menyimpan stasiun:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+/* =====================================================
+   MACHINE
+===================================================== */
+
+window.openMachineForm = function(){
+
+    if(!requireAdmin()) return;
+
+    document.getElementById(
+        "machineFormTitle"
+    ).textContent =
+        "Tambah Mesin";
+
+    document.getElementById(
+        "machineOldName"
+    ).value = "";
+
+    document.getElementById(
+        "machineName"
+    ).value = "";
+
+    document.getElementById(
+        "machineStatus"
+    ).value = "Running";
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "machineFormModal"
+            )
+        ).show();
+};
+
+
+window.editCurrentMachine = function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    if(!station) return;
+
+    const machine =
+        station.machines[currentMachineName];
+
+    if(!machine) return;
+
+    document.getElementById(
+        "machineFormTitle"
+    ).textContent =
+        "Edit Mesin";
+
+    document.getElementById(
+        "machineOldName"
+    ).value =
+        currentMachineName;
+
+    document.getElementById(
+        "machineName"
+    ).value =
+        currentMachineName;
+
+    document.getElementById(
+        "machineStatus"
+    ).value =
+        machine.status || "Running";
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "machineFormModal"
+            )
+        ).show();
+};
+
+
+window.saveMachine = async function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    if(!station) return;
+
+    const oldName =
+        document.getElementById(
+            "machineOldName"
+        ).value;
+
+    const name =
+        document.getElementById(
+            "machineName"
+        ).value.trim();
+
+    const status =
+        document.getElementById(
+            "machineStatus"
+        ).value;
+
+    if(!name){
+
+        alert("Nama mesin wajib diisi.");
+
+        return;
+    }
+
+    station.machines =
+        station.machines || {};
+
+    if(
+        oldName &&
+        oldName !== name
+    ){
+
+        if(
+            station.machines[name]
+        ){
+
+            alert(
+                "Nama mesin tersebut sudah ada."
+            );
+
+            return;
+        }
+
+        station.machines[name] =
+            station.machines[oldName];
+
+        delete station.machines[oldName];
+
+    }else if(!oldName){
+
+        if(
+            station.machines[name]
+        ){
+
+            alert(
+                "Nama mesin tersebut sudah ada."
+            );
+
+            return;
+        }
+
+        station.machines[name] = {
+
+            status:status,
+
+            spec:{},
+
+            repairs:[],
+
+            nameplateUrl:"",
+
+            catalogUrl:""
+        };
+    }
+
+    station.machines[name].status =
+        status;
+
+    try{
+
+        await setDoc(
+            doc(db,"stations",station.id),
+            station
+        );
+
+        currentMachineName = name;
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById(
+                    "machineFormModal"
+                )
+            )
+            .hide();
+
+        renderMachineList(station);
+        renderStations();
+
+        showMessage(
+            "Mesin berhasil disimpan.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Gagal menyimpan mesin:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+window.openMachine = function(name){
+
+    const station =
+        getCurrentStation();
+
+    if(!station) return;
+
+    currentMachineName = name;
+
+    const machine =
+        station.machines[name];
+
+    if(!machine) return;
+
+    document.getElementById(
+        "machineModalTitle"
+    ).textContent =
+        name;
+
+    document.getElementById(
+        "machineModalSubtitle"
+    ).textContent =
+        station.name;
+
+    showMachineTab("info");
+
+    renderMachineInfo(machine);
+
+    renderRepairTable();
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "machineModal"
+            )
+        ).show();
+};
+
+
+function renderMachineInfo(machine){
+
+    const spec =
+        machine.spec || {};
+
+    let specRows = "";
+
+    Object.keys(spec).forEach(key => {
+
+        if(
+            spec[key] === undefined ||
+            spec[key] === null ||
+            spec[key] === ""
+        ) return;
+
+        specRows += `
+            <tr>
+                <td>
+                    ${escapeHtml(key)}
+                </td>
+                <td>
+                    ${escapeHtml(String(spec[key]))}
+                </td>
+            </tr>
+        `;
+    });
+
+    if(!specRows){
+
+        specRows = `
+            <tr>
+                <td colspan="2"
+                    class="text-muted text-center">
+                    Belum ada spesifikasi.
+                </td>
+            </tr>
+        `;
+    }
+
+    const nameplate =
+        machine.nameplateUrl
+        ? `
+            <a href="${escapeAttr(machine.nameplateUrl)}"
+               target="_blank"
+               class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-image"></i>
+                Lihat Nameplate
+            </a>
+          `
+        : "";
+
+    const catalog =
+        machine.catalogUrl
+        ? `
+            <a href="${escapeAttr(machine.catalogUrl)}"
+               target="_blank"
+               class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-file-earmark-pdf"></i>
+                Buka PDF Katalog
+            </a>
+          `
+        : "";
+
+    document.getElementById(
+        "machineInfoTab"
+    ).innerHTML = `
+
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+
+                <div class="card machine-card">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold">
+                            Status Mesin
+                        </h6>
+
+                        <span class="badge
+                            ${getStatusClass(machine.status)}
+                            fs-6">
+                            ${escapeHtml(machine.status || "Unknown")}
+                        </span>
+
+                        <hr>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            ${nameplate}
+                            ${catalog}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-8">
+
+                <div class="card machine-card">
+
+                    <div class="card-body">
+
+                        <h6 class="fw-bold mb-3">
+                            Spesifikasi Mesin
+                        </h6>
+
+                        <div class="table-responsive">
+
+                            <table class="table spec-table">
+
+                                <tbody>
+                                    ${specRows}
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+};
+
+
+window.showMachineTab = function(tab){
+
+    document.getElementById(
+        "machineInfoTab"
+    ).style.display =
+        tab === "info"
+        ? "block"
+        : "none";
+
+    document.getElementById(
+        "maintenanceTab"
+    ).style.display =
+        tab === "maintenance"
+        ? "block"
+        : "none";
+};
+
+
+/* =====================================================
+   MACHINE SPEC
+===================================================== */
+
+window.openMachineSpec = function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    const machine =
+        station.machines[currentMachineName];
+
+    if(!machine) return;
+
+    document.getElementById(
+        "specMachineName"
+    ).value =
+        currentMachineName;
+
+    document.getElementById(
+        "specStatus"
+    ).value =
+        machine.status || "Running";
+
+    document.getElementById(
+        "nameplateUrl"
+    ).value =
+        machine.nameplateUrl || "";
+
+    document.getElementById(
+        "catalogUrl"
+    ).value =
+        machine.catalogUrl || "";
+
+    renderSpecFields(
+        machine.spec || {}
+    );
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "machineSpecModal"
+            )
+        ).show();
+};
+
+
+function renderSpecFields(spec){
+
+    const container =
+        document.getElementById(
+            "specFields"
+        );
+
+    container.innerHTML = "";
+
+    defaultSpecFields.forEach((field,index) => {
+
+        const id =
+            "spec_" + index;
+
+        const value =
+            spec[field] || "";
+
+        container.innerHTML += `
+
+        <div class="row mb-2 align-items-center">
+
+            <div class="col-md-4">
+
+                <label class="form-label mb-1">
+                    ${escapeHtml(field)}
+                </label>
+
+            </div>
+
+            <div class="col-md-8">
+
+                <input type="text"
+                       class="form-control spec-input"
+                       data-field="${escapeAttr(field)}"
+                       id="${id}"
+                       value="${escapeAttr(value)}">
+
+            </div>
+
+        </div>
+
+        `;
+    });
+};
+
+
+window.saveMachineSpec = async function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    if(!station) return;
+
+    const machine =
+        station.machines[currentMachineName];
+
+    if(!machine) return;
+
+    const spec = {};
+
+    document.querySelectorAll(
+        ".spec-input"
+    ).forEach(input => {
+
+        const field =
+            input.dataset.field;
+
+        const value =
+            input.value.trim();
+
+        if(value){
+            spec[field] = value;
+        }
+    });
+
+    machine.status =
+        document.getElementById(
+            "specStatus"
+        ).value;
+
+    machine.spec = spec;
+
+    machine.nameplateUrl =
+        document.getElementById(
+            "nameplateUrl"
+        ).value.trim();
+
+    machine.catalogUrl =
+        document.getElementById(
+            "catalogUrl"
+        ).value.trim();
+
+    try{
+
+        await setDoc(
+            doc(db,"stations",station.id),
+            station
+        );
+
+        renderMachineInfo(machine);
+
+        renderStations();
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById(
+                    "machineSpecModal"
+                )
+            )
+            .hide();
+
+        showMessage(
+            "Spesifikasi berhasil disimpan.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Gagal menyimpan spesifikasi:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+/* =====================================================
+   DELETE MACHINE
+===================================================== */
+
+window.deleteCurrentMachine = async function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    if(!station) return;
+
+    if(
+        !confirm(
+            "Hapus mesin '" +
+            currentMachineName +
+            "'?"
+        )
+    ) return;
+
+    delete station.machines[
+        currentMachineName
+    ];
+
+    try{
+
+        await setDoc(
+            doc(db,"stations",station.id),
+            station
+        );
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById(
+                    "machineModal"
+                )
+            )
+            .hide();
+
+        renderMachineList(station);
+        renderStations();
+
+        showMessage(
+            "Mesin berhasil dihapus.",
+            "success"
+        );
+
+    }catch(error){
+
+        alert(
+            "Gagal menghapus mesin:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+/* =====================================================
+   DELETE STATION
+===================================================== */
+
+window.deleteCurrentStation = async function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    if(!station) return;
+
+    if(
+        !confirm(
+            "Hapus stasiun '" +
+            station.name +
+            "' beserta seluruh data mesinnya?"
+        )
+    ) return;
+
+    try{
+
+        await deleteDoc(
+            doc(db,"stations",station.id)
+        );
+
+        stationsData =
+            stationsData.filter(
+                s => s.id !== station.id
+            );
+
+        currentStationId = null;
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById(
+                    "stationModal"
+                )
+            )
+            .hide();
+
+        renderStations();
+
+        showMessage(
+            "Stasiun berhasil dihapus.",
+            "success"
+        );
+
+    }catch(error){
+
+        alert(
+            "Gagal menghapus stasiun:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+/* =====================================================
+   MAINTENANCE
+===================================================== */
+
+window.openRepairForm = function(){
+
+    if(!requireAdmin()) return;
+
+    document.getElementById(
+        "repairIndex"
+    ).value = "";
+
+    document.getElementById(
+        "repairDate"
+    ).value =
+        new Date()
+        .toISOString()
+        .split("T")[0];
+
+    document.getElementById(
+        "repairHM"
+    ).value = "";
+
+    document.getElementById(
+        "repairProblem"
+    ).value = "";
+
+    document.getElementById(
+        "repairAction"
+    ).value = "";
+
+    document.getElementById(
+        "repairDescription"
+    ).value = "";
+
+    document.getElementById(
+        "repairParts"
+    ).value = "";
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "repairModal"
+            )
+        ).show();
+};
+
+
+window.saveRepair = async function(){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    const machine =
+        station.machines[
+            currentMachineName
+        ];
+
+    if(!machine) return;
+
+    machine.repairs =
+        machine.repairs || [];
+
+    const index =
+        document.getElementById(
+            "repairIndex"
+        ).value;
+
+    const record = {
+
+        date:
+            document.getElementById(
+                "repairDate"
+            ).value,
+
+        hm:
+            document.getElementById(
+                "repairHM"
+            ).value,
+
+        problem:
+            document.getElementById(
+                "repairProblem"
+            ).value.trim(),
+
+        action:
+            document.getElementById(
+                "repairAction"
+            ).value.trim(),
+
+        description:
+            document.getElementById(
+                "repairDescription"
+            ).value.trim(),
+
+        parts:
+            document.getElementById(
+                "repairParts"
+            ).value.trim(),
+
+        createdAt:
+            new Date().toISOString()
+    };
+
+    if(index === ""){
+
+        machine.repairs.push(record);
+
+    }else{
+
+        machine.repairs[
+            Number(index)
+        ] = record;
+    }
+
+    try{
+
+        await setDoc(
+            doc(db,"stations",station.id),
+            station
+        );
+
+        bootstrap.Modal
+            .getInstance(
+                document.getElementById(
+                    "repairModal"
+                )
+            )
+            .hide();
+
+        renderRepairTable();
+
+        showMessage(
+            "Data maintenance berhasil disimpan.",
+            "success"
+        );
+
+    }catch(error){
+
+        alert(
+            "Gagal menyimpan maintenance:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+function renderRepairTable(){
+
+    const container =
+        document.getElementById(
+            "repairTable"
+        );
+
+    const station =
+        getCurrentStation();
+
+    if(!station){
+
+        container.innerHTML = "";
+
+        return;
+    }
+
+    const machine =
+        station.machines[
+            currentMachineName
+        ];
+
+    const repairs =
+        machine?.repairs || [];
+
+    if(repairs.length === 0){
+
+        container.innerHTML = `
+            <div class="empty-box">
+                Belum ada riwayat maintenance.
+            </div>
+        `;
+
+        return;
+    }
+
+    let html = `
+
+    <div class="table-responsive">
+
+    <table class="table table-bordered align-middle">
+
+        <thead>
+
+            <tr>
+
+                <th>No</th>
+                <th>Tanggal</th>
+                <th>HM</th>
+                <th>Problem</th>
+                <th>Tindakan</th>
+                <th>Sparepart</th>
+                <th class="admin-only">
+                    Aksi
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+    `;
+
+    repairs.forEach((r,index) => {
+
+        html += `
+
+        <tr>
+
+            <td>${index + 1}</td>
+
+            <td>
+                ${escapeHtml(r.date || "-")}
+            </td>
+
+            <td>
+                ${escapeHtml(r.hm || "-")}
+            </td>
+
+            <td>
+                ${escapeHtml(r.problem || "-")}
+            </td>
+
+            <td>
+                ${escapeHtml(r.action || "-")}
+            </td>
+
+            <td>
+                ${escapeHtml(r.parts || "-")}
+            </td>
+
+            <td class="admin-only">
+
+                <button class="btn btn-sm btn-warning"
+                        onclick="editRepair(${index})">
+                    <i class="bi bi-pencil"></i>
+                </button>
+
+                <button class="btn btn-sm btn-danger"
+                        onclick="deleteRepair(${index})">
+                    <i class="bi bi-trash"></i>
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+    });
+
+    html += `
+        </tbody>
+    </table>
+
+    </div>
+    `;
+
+    container.innerHTML = html;
+};
+
+
+window.editRepair = function(index){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    const machine =
+        station.machines[
+            currentMachineName
+        ];
+
+    const r =
+        machine.repairs[index];
+
+    if(!r) return;
+
+    document.getElementById(
+        "repairIndex"
+    ).value = index;
+
+    document.getElementById(
+        "repairDate"
+    ).value =
+        r.date || "";
+
+    document.getElementById(
+        "repairHM"
+    ).value =
+        r.hm || "";
+
+    document.getElementById(
+        "repairProblem"
+    ).value =
+        r.problem || "";
+
+    document.getElementById(
+        "repairAction"
+    ).value =
+        r.action || "";
+
+    document.getElementById(
+        "repairDescription"
+    ).value =
+        r.description || "";
+
+    document.getElementById(
+        "repairParts"
+    ).value =
+        r.parts || "";
+
+    bootstrap.Modal
+        .getOrCreateInstance(
+            document.getElementById(
+                "repairModal"
+            )
+        ).show();
+};
+
+
+window.deleteRepair = async function(index){
+
+    if(!requireAdmin()) return;
+
+    const station =
+        getCurrentStation();
+
+    const machine =
+        station.machines[
+            currentMachineName
+        ];
+
+    if(
+        !confirm(
+            "Hapus data maintenance ini?"
+        )
+    ) return;
+
+    machine.repairs.splice(
+        index,
+        1
+    );
+
+    try{
+
+        await setDoc(
+            doc(db,"stations",station.id),
+            station
+        );
+
+        renderRepairTable();
+
+        showMessage(
+            "Data maintenance dihapus.",
+            "success"
+        );
+
+    }catch(error){
+
+        alert(
+            "Gagal menghapus data:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+/* =====================================================
+   BACKUP
+===================================================== */
+
+window.backupData = async function(){
+
+    if(!requireAdmin()) return;
+
+    try{
+
+        const snapshot =
+            await getDocs(
+                collection(db,"stations")
+            );
+
+        const stations =
+            snapshot.docs.map(d => ({
+                id:d.id,
+                ...d.data()
+            }));
+
+        const settingsSnapshot =
+            await getDocs(
+                collection(db,"settings")
+            );
+
+        const settings = {};
+
+        settingsSnapshot.forEach(d => {
+
+            settings[d.id] =
+                d.data();
+        });
+
+        let machineCount = 0;
+        let repairCount = 0;
+
+        stations.forEach(station => {
+
+            const machines =
+                station.machines || {};
+
+            machineCount +=
+                Object.keys(machines).length;
+
+            Object.values(machines)
+                .forEach(machine => {
+
+                    repairCount +=
+                        (machine.repairs || [])
+                        .length;
+                });
+        });
+
+        const backup = {
+
+            format:
+                "KATALOG_SS2_POM_BACKUP",
+
+            version:3,
+
+            projectId:
+                "katalog-mesin-ss2-pom",
+
+            createdAt:
+                new Date().toISOString(),
+
+            stationCount:
+                stations.length,
+
+            machineCount:
+                machineCount,
+
+            repairCount:
+                repairCount,
+
+            stations:
+                stations,
+
+            settings:
+                settings
+        };
+
+        const blob =
+            new Blob(
+                [
+                    JSON.stringify(
+                        backup,
+                        null,
+                        2
+                    )
+                ],
+                {
+                    type:
+                        "application/json"
+                }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const a =
+            document.createElement("a");
+
+        const date =
+            new Date()
+            .toISOString()
+            .slice(0,10);
+
+        a.href = url;
+
+        a.download =
+            `backup_katalog_ss2_pom_${date}.json`;
+
+        a.click();
+
+        URL.revokeObjectURL(url);
+
+        showMessage(
+            "Backup berhasil dibuat.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Backup gagal:\n" +
+            getFirebaseError(error)
+        );
+    }
+};
+
+
+/* =====================================================
+   RESTORE
+===================================================== */
+
+window.restoreData = async function(event){
+
+    if(!requireAdmin()){
+
+        event.target.value = "";
+
+        return;
+    }
+
+    const file =
+        event.target.files[0];
+
+    if(!file) return;
+
+    try{
+
+        const text =
+            await file.text();
+
+        const backup =
+            JSON.parse(text);
+
+        if(
+            backup.format !==
+            "KATALOG_SS2_POM_BACKUP"
+        ){
+
+            throw new Error(
+                "File bukan backup katalog SS2 POM."
+            );
+        }
+
+        if(
+            !Array.isArray(
+                backup.stations
+            )
+        ){
+
+            throw new Error(
+                "Data stations tidak ditemukan."
+            );
+        }
+
+        const ok =
+            confirm(
+                "Restore backup?\n\n" +
+                "Stasiun: " +
+                backup.stationCount +
+                "\n" +
+                "Mesin: " +
+                backup.machineCount +
+                "\n" +
+                "Maintenance: " +
+                backup.repairCount +
+                "\n\n" +
+                "Data dengan ID yang sama akan ditimpa."
+            );
+
+        if(!ok){
+
+            event.target.value = "";
+
+            return;
+        }
+
+        /*
+           Firestore batch memiliki batas operasi.
+           Kita pecah maksimal 400 operasi.
+        */
+
+        const operations = [];
+
+        backup.stations.forEach(station => {
+
+            operations.push({
+                type:"set",
+                ref:
+                    doc(
+                        db,
+                        "stations",
+                        station.id
+                    ),
+                data:station
+            });
+        });
+
+        if(backup.settings){
+
+            Object.keys(
+                backup.settings
+            ).forEach(id => {
+
+                operations.push({
+                    type:"set",
+                    ref:
+                        doc(
+                            db,
+                            "settings",
+                            id
+                        ),
+                    data:
+                        backup.settings[id]
+                });
+
+            });
+        }
+
+        for(
+            let i = 0;
+            i < operations.length;
+            i += 400
+        ){
+
+            const batch =
+                writeBatch(db);
+
+            const chunk =
+                operations.slice(
+                    i,
+                    i + 400
+                );
+
+            chunk.forEach(op => {
+
+                batch.set(
+                    op.ref,
+                    op.data
+                );
+
+            });
+
+            await batch.commit();
+        }
+
+        await loadFirebaseData();
+
+        showMessage(
+            "Restore berhasil.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Restore gagal:\n" +
+            getFirebaseError(error)
+        );
+
+    }finally{
+
+        event.target.value = "";
+    }
+};
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+window.printMachineCard = function(){
+
+    const station =
+        getCurrentStation();
+
+    const machine =
+        station?.machines[
+            currentMachineName
+        ];
+
+    if(!machine) return;
+
+    const spec =
+        machine.spec || {};
+
+    let rows = "";
+
+    Object.keys(spec)
+        .forEach(key => {
+
+            if(!spec[key]) return;
+
+            rows += `
+                <tr>
+                    <td>
+                        ${escapeHtml(key)}
+                    </td>
+                    <td>
+                        ${escapeHtml(
+                            String(spec[key])
+                        )}
+                    </td>
+                </tr>
+            `;
+        });
+
+    const repairs =
+        machine.repairs || [];
+
+    let repairRows = "";
+
+    repairs.forEach((r,i) => {
+
+        repairRows += `
+            <tr>
+                <td>${i+1}</td>
+                <td>${escapeHtml(r.date || "-")}</td>
+                <td>${escapeHtml(r.hm || "-")}</td>
+                <td>${escapeHtml(r.problem || "-")}</td>
+                <td>${escapeHtml(r.action || "-")}</td>
+                <td>${escapeHtml(r.parts || "-")}</td>
+            </tr>
+        `;
+    });
+
+    document.getElementById(
+        "printArea"
+    ).innerHTML = `
+
+        <h2>
+            KATALOG MESIN PABRIK SAWIT
+        </h2>
+
+        <h3>
+            PT BPSJ SS2 POM
+        </h3>
+
+        <hr>
+
+        <h4>
+            ${escapeHtml(currentMachineName)}
+        </h4>
+
+        <p>
+            Stasiun:
+            ${escapeHtml(station.name)}
+        </p>
+
+        <p>
+            Status:
+            ${escapeHtml(machine.status || "-")}
+        </p>
+
+        <h4>Spesifikasi</h4>
+
+        <table border="1"
+               cellspacing="0"
+               cellpadding="6"
+               width="100%">
+
+            <tbody>
+                ${rows}
+            </tbody>
+
+        </table>
+
+        <br>
+
+        <h4>Riwayat Maintenance</h4>
+
+        <table border="1"
+               cellspacing="0"
+               cellpadding="6"
+               width="100%">
+
+            <thead>
+
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>HM</th>
+                    <th>Problem</th>
+                    <th>Tindakan</th>
+                    <th>Sparepart</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+                ${repairRows}
+            </tbody>
+
+        </table>
+
+        <br>
+
+        <small>
+            BY: BASUKI WIDIYANTO
+        </small>
+    `;
+
+    window.print();
+};
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+window.toggleDarkMode = function(){
+
+    document.body.classList.toggle(
+        "dark-mode"
+    );
+
+    localStorage.setItem(
+        "sawit_dark_mode",
+        document.body.classList.contains(
+            "dark-mode"
+        )
+    );
+};
+
+
+if(
+    localStorage.getItem(
+        "sawit_dark_mode"
+    ) === "true"
+){
+
+    document.body.classList.add(
+        "dark-mode"
+    );
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(){
+
+    let total = 0;
+    let running = 0;
+    let standby = 0;
+    let repair = 0;
+
+    stationsData.forEach(station => {
+
+        const machines =
+            station.machines || {};
+
+        Object.values(machines)
+            .forEach(machine => {
+
+                total++;
+
+                if(machine.status === "Running")
+                    running++;
+
+                else if(machine.status === "Standby")
+                    standby++;
+
+                else if(machine.status === "Repair")
+                    repair++;
+            });
+    });
+
+    document.getElementById(
+        "totalMachines"
+    ).textContent = total;
+
+    document.getElementById(
+        "runningMachines"
+    ).textContent = running;
+
+    document.getElementById(
+        "standbyMachines"
+    ).textContent = standby;
+
+    document.getElementById(
+        "repairMachines"
+    ).textContent = repair;
+};
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function getCurrentStation(){
+
+    return stationsData.find(
+        s => s.id === currentStationId
+    );
+}
+
+
+function requireAdmin(){
+
+    if(!isAdmin){
+
+        alert(
+            "Fitur ini hanya dapat digunakan oleh Admin."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+function getStatusClass(status){
+
+    if(status === "Running")
+        return "status-running";
+
+    if(status === "Standby")
+        return "status-standby";
+
+    if(status === "Repair")
+        return "status-repair";
+
+    return "status-unknown";
+}
+
+
+function slugify(text){
+
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g,"-")
+        .replace(/^-+|-+$/g,"");
+}
+
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function escapeAttr(value){
+
+    return escapeHtml(value);
+}
+
+
+function clearSearch(){
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+    renderStations();
+}
+
+
+function showMessage(text,type="success"){
+
+    const old =
+        document.getElementById(
+            "firebaseToast"
+        );
+
+    if(old) old.remove();
+
+    const div =
+        document.createElement("div");
+
+    div.id =
+        "firebaseToast";
+
+    div.className =
+        `alert alert-${type}
+         position-fixed bottom-0 end-0
+         m-3 shadow`;
+
+    div.style.zIndex = "9999";
+
+    div.textContent = text;
+
+    document.body.appendChild(div);
+
+    setTimeout(() => {
+
+        div.remove();
+
+    },4000);
+}
+
+
+function getFirebaseError(error){
+
+    if(
+        error?.code ===
+        "permission-denied"
+    ){
+
+        return "Permission ditolak. Periksa Firestore Rules dan email Admin.";
+    }
+
+    if(
+        error?.code ===
+        "auth/invalid-credential"
+    ){
+
+        return "Email atau password salah.";
+    }
+
+    if(
+        error?.code ===
+        "auth/invalid-email"
+    ){
+
+        return "Format email tidak valid.";
+    }
+
+    if(
+        error?.code ===
+        "auth/network-request-failed"
+    ){
+
+        return "Tidak dapat terhubung ke internet.";
+    }
+
+    return error?.message ||
+        "Terjadi kesalahan.";
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadFirebaseData();
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
